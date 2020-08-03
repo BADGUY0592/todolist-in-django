@@ -1,0 +1,13 @@
+{% if user.is_authenticated %}
+    Logged in as {{ user.username }}
+    <a href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logout</a>
+    <form id="logout-form" action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+    </form>
+{% else %}
+    <a href="/signup/">Signup</a><br>
+    <a href="/login/">Login</a>
+{% endif %}
+
+{% block content %}
+{% endblock %}
