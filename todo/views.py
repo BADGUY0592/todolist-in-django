@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.db import IntegrityError
-from django.contrib.auth import login, authenticate , logout
+from django.contrib.auth import login,authenticate,logout
+from .forms import TodoForm
 
 
 # Create your views here.
@@ -45,3 +46,16 @@ def logoutuser(request):
 
 def currenttodos(request):
     return render(request, 'todo/currenttodos.html')
+
+def createtodo(request):
+    if request.method == 'GET':
+        return render(request, 'todo/createtodo.html',{'form':TodoForm()})
+    elif request.method == 'POST':
+        try:
+            form = TodoForm(request.POST)
+            newtodo = form.save(commit=False)
+            newtodo.User = request.user
+            newtodo.save()
+            return redirect('currenttodos')
+        except ValueError:
+            return render(request, 'todo/createtodo.html', {'form': TodoForm(),'error':'Value Error.'})
