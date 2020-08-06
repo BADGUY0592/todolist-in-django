@@ -1,4 +1,70 @@
 {% extends 'todo/header.html' %}
+{% block title %}
+    Home
+{% endblock title %}
 {% block content %}
-    home
-{% endblock %}
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card text-white bg-success" style="margin:2%;">
+            <div class="card-header">Home</div>
+            <div class="card-body">
+                <h5 class="card-title">
+                    <a href="https://github.com/BADGUY0592" style="text-decoration:none;color:white">
+                        Other Projects
+                    </a>
+                </h5>
+                <p class="card-text">
+                    <a href="https://github.com/BADGUY0592/Password-Generator-Website-in-Django" style="text-decoration:none;color:white"><i class="fa fa-arrow-circle-right"></i> Password Generator Website</a><br>
+                    <a href="https://github.com/BADGUY0592/Portfolio-Website-In-Django" style="text-decoration:none;color:white"><i class="fa fa-arrow-circle-right"></i> Portfolio Website</a><br>
+                </p>
+            </div>
+        </div>
+    </div>
+    {% if user.is_authenticated %}
+        <div class="col-lg-8">
+            <div class="card text-white bg-danger" style="margin:2%;">
+                <div class="card-header">Current Todos</div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover">
+                            <thead></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="col-lg-4">
+            <div class="card text-white bg-danger" style="margin:2%;">
+                <div class="card-header">Signup</div>
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a href="{% url 'signupuser' %}" style="text-decoration:none;color:white">
+                            Click To Signup.
+                        </a>
+                    </h5>
+                    <p class="card-text">
+                        Signup and Create Some Todos.<br><br>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card text-white bg-warning" style="margin:2%;">
+                <div class="card-header">Login</div>
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a href="{% url 'login' %}" style="text-decoration:none;color:white">
+                            Click To Login.
+                        </a>
+                    </h5>
+                    <p class="card-text">
+                        Login and Create Some Todos.<br><br>
+                    </p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock content %}

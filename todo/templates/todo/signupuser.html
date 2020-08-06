@@ -1,6 +1,13 @@
-<h2>{{ error }}</h2>
-<form action="" method="post">
-    {% csrf_token %}
-    {{ form }}
-    <button type="submit">Submit</button>
-</form>
+{% extends 'todo/header.html' %}
+{% block title %}
+    Sign Up
+{% endblock title %}
+{% block content %}
+    Sign Up
+    <h2>{{ error }}</h2>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit">Submit</button>
+    </form>
+{% endblock content %}
