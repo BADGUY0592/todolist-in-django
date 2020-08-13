@@ -1,0 +1,22 @@
+{% extends 'todo/header.html' %}
+{% block title %}
+    {{ todo.title }}
+{% endblock title %}
+{% block content %}
+<bR>
+    <div class="card" style="margin:2%;">
+        <div class="card-header">{{ todo.title }}</div>
+        <div class="card-body">
+            <h5 class="card-title">
+                {{ todo.title }}
+            </h5>
+            <p class="card-text">
+                {{ todo.memo }}
+            </p>
+            {{ todo.created }}<br>
+            <a href="/todo/edit/{{ todo.id }}" class="badge badge-pill badge-primary"><i class="fa fa-pencil"></i> Edit</a>&nbsp;&nbsp;&nbsp;
+            <a href="/todo/delete/{{ todo.id }}" class="badge badge-pill badge-danger"><i class="fa fa-trash-o"></i> Delete</a>
+        </div>
+    </div>
+<br>
+{% endblock content %}

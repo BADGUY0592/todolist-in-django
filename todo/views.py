@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.contrib.auth import login,authenticate,logout
 from .forms import TodoForm
+from .models import Todo
 
 
 # Create your views here.
@@ -45,7 +46,30 @@ def logoutuser(request):
         return redirect('home')
 
 def currenttodos(request):
-    return render(request, 'todo/currenttodos.html')
+    todos=Todo.objects.filter(User=request.user,datecompleted__isnull=True).order_by('-created')
+    return render(request, 'todo/currenttodos.html',{'todos':todos})
+
+def tododetail(request, todo_pk):
+    todo = get_object_or_404(Todo, id=todo_pk,User=request.user)
+    return render(request, 'todo/tododetails.html',{'todo':todo})
+
+def edittodo(request, todo_pk):
+    todo = get_object_or_404(Todo, id=todo_pk, User=request.user)
+    if request.method == 'GET':
+        form=TodoForm(instance=todo)
+        return render(request, 'todo/edittodo.html',{'todo':todo,'form':form})
+    elif request.method == 'POST':
+        try:
+            form = TodoForm(request.POST, instance=todo)
+            form.save()
+            return redirect('currenttodos')
+        except ValueError:
+            return render(request, 'todo/edittodo.html', {'todo':todo,'form':form,'error':'Value Error.'})
+
+def deltodo(request, todo_pk):
+    todo = get_object_or_404(Todo, id=todo_pk,User=request.user)
+    form=TodoForm(instance=todo)
+    return render(request, 'todo/edittodo.html',{'todo':todo,'form':form})
 
 def createtodo(request):
     if request.method == 'GET':

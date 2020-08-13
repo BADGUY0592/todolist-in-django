@@ -40,9 +40,12 @@
             text-align: center;
         }
         .container{
-            margin-top:10%;
+            margin-top:5%;
             background-color: #fff;
             box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.06), 0 1px 0 0 rgba(0, 0, 0, 0.02);
+        }
+        a{
+            text-decoration:none;
         }
     </style>
 </head>
@@ -84,6 +87,9 @@
         {% block content %}
         {% endblock content %}
     </div>
+    <!-- Modal -->
+    {% block modal %}
+    {% endblock modal %}
     <canvas class="background"></canvas>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/particlesjs/2.2.2/particles.min.js"></script>
     <script>
@@ -113,5 +119,8 @@
               <a href="https://github.com/BADGUY0592" style="padding:10px"><i class="fa fa-github" style="font-size:30px;"></i> Git</a>
         </span>
     </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    {% block script %}
+    {% endblock script %}
 </body>
 </html>

@@ -3,11 +3,24 @@
     Sign Up
 {% endblock title %}
 {% block content %}
-    Sign Up
-    <h2>{{ error }}</h2>
-    <form action="" method="post">
-        {% csrf_token %}
-        {{ form }}
-        <button type="submit">Submit</button>
-    </form>
+<bR>
+    <div class="card" style="margin:2%;">
+        <div class="card-header">Sign Up</div>
+        <div class="card-body">
+            <form action="" method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-outline-success">Signup</button>
+            </form>
+            {% if error is not none %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>{{ error }}</strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+<br>
 {% endblock content %}

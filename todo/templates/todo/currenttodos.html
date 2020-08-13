@@ -3,6 +3,96 @@
     Current Todos
 {% endblock title %}
 {% block content %}
-    Current Todos
-
+<bR>
+    <div class="card" style="margin:2%;">
+        <div class="card-header">Current Todos</div>
+        <div class="card-body">
+            {% if todos.count > 0 %}
+                <div class="table-responsive">
+                <table class="table table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <td>Title</td>
+                            <td>Memo</td>
+                            <td>Created</td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for todo in todos %}
+                            {% if todo.important %}
+                                <tr class="font-weight-bold">
+                            {% else %}
+                                <tr>
+                            {% endif %}
+                                <td>
+<!--                                    <a class="todo" id="t{{ todo.id }}" href="#" data-toggle="modal" data-target="#exampleModal">-->
+<!--                                        {{ todo.title }}-->
+<!--                                    </a><br>-->
+                                    <a href="/current/todo-details/{{ todo.id }}">
+                                        {{ todo.title }}
+                                    </a>
+                                </td>
+                                <td>
+                                    {{ todo.memo|truncatechars:50 }}
+                                </td>
+                                <td>{{ todo.created }}</td>
+                                <td>
+                                    <a href="/todo/edit/{{ todo.id }}" class="badge badge-pill badge-primary"><i class="fa fa-pencil"></i> Edit</a>&nbsp;&nbsp;&nbsp;
+                                    <a href="/todo/delete/{{ todo.id }}" class="badge badge-pill badge-danger"><i class="fa fa-trash-o"></i> Delete</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+                <span class="badge badge-pill badge-danger"> No Todos Found. </span>
+            {% endif %}
+        </div>
+    </div>
+<br>
 {% endblock content %}
+{% block modal %}
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Todo List</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock modal %}
+{% block script %}
+<script type="text/javascript">
+    jQuery(document).ready(function ()
+    {
+        $('.todo').on('click',function(){
+            var tID = $(this).attr("id").slice(1);
+            if(tID)
+            {
+                jQuery.ajax({
+                    url : '/current/todo-details/'+tID,
+                    type : "GET",
+                    dataType : "json",
+                    success:function(data)
+                    {
+                        $('.modal-body').empty();
+                        console.alert(data);
+                        $.each(data, function(key,value){
+                            $('.modal-body').append('<h6>'+value.title+'</h6>');
+                        });
+                    }
+                });
+            }
+        });
+    });
+</script>
+{% endblock script %}

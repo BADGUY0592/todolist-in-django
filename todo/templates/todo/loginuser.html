@@ -1,10 +1,23 @@
 {% extends 'todo/header.html' %}
 {% block content %}
-    Login
-{{ error }}
-<form action="" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Submit</button>
-</form>
+<bR>
+    <div class="card" style="margin:2%;">
+        <div class="card-header">Login</div>
+        <div class="card-body">
+            <form action="" method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-outline-success">Login</button>
+            </form>
+            {% if error is not none %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>{{ error }}</strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+<br>
 {% endblock %}
