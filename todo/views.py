@@ -9,7 +9,11 @@ from .models import Todo
 
 # Create your views here.
 def home(request):
-    return render(request, 'todo/home.html')
+    if request.user.is_authenticated:
+        todos = Todo.objects.filter(User=request.user, datecompleted__isnull=True).order_by('-created')
+        return render(request, 'todo/home.html',{'todos':todos})
+    else:
+        return render(request, 'todo/home.html')
 
 def loginuser(request):
     if request.method =='GET':
@@ -46,40 +50,47 @@ def logoutuser(request):
         return redirect('home')
 
 def currenttodos(request):
-    todos=Todo.objects.filter(User=request.user,datecompleted__isnull=True).order_by('-created')
-    return render(request, 'todo/currenttodos.html',{'todos':todos})
+    if request.user.is_authenticated:
+        todos=Todo.objects.filter(User=request.user,datecompleted__isnull=True).order_by('-created')
+        return render(request, 'todo/currenttodos.html',{'todos':todos})
 
 def tododetail(request, todo_pk):
-    todo = get_object_or_404(Todo, id=todo_pk,User=request.user)
-    return render(request, 'todo/tododetails.html',{'todo':todo})
+    if request.user.is_authenticated:
+        todo = get_object_or_404(Todo, id=todo_pk,User=request.user)
+        return render(request, 'todo/tododetails.html',{'todo':todo})
 
 def edittodo(request, todo_pk):
-    todo = get_object_or_404(Todo, id=todo_pk, User=request.user)
-    if request.method == 'GET':
-        form=TodoForm(instance=todo)
-        return render(request, 'todo/edittodo.html',{'todo':todo,'form':form})
-    elif request.method == 'POST':
-        try:
-            form = TodoForm(request.POST, instance=todo)
-            form.save()
-            return redirect('currenttodos')
-        except ValueError:
-            return render(request, 'todo/edittodo.html', {'todo':todo,'form':form,'error':'Value Error.'})
+    if request.user.is_authenticated:
+        todo = get_object_or_404(Todo, id=todo_pk, User=request.user)
+        if request.method == 'GET':
+            form=TodoForm(instance=todo)
+            return render(request, 'todo/edittodo.html',{'todo':todo,'form':form})
+        elif request.method == 'POST':
+            try:
+                form = TodoForm(request.POST, instance=todo)
+                form.save()
+                return redirect('currenttodos')
+            except ValueError:
+                return render(request, 'todo/edittodo.html', {'todo':todo,'form':form,'error':'Value Error.'})
 
 def deltodo(request, todo_pk):
-    todo = get_object_or_404(Todo, id=todo_pk,User=request.user)
-    form=TodoForm(instance=todo)
-    return render(request, 'todo/edittodo.html',{'todo':todo,'form':form})
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            todo = get_object_or_404(Todo, id=todo_pk,User=request.user)
+            form = TodoForm(instance=todo)
+            form.delete()
+            return redirect('currenttodos')
 
 def createtodo(request):
-    if request.method == 'GET':
-        return render(request, 'todo/createtodo.html',{'form':TodoForm()})
-    elif request.method == 'POST':
-        try:
-            form = TodoForm(request.POST)
-            newtodo = form.save(commit=False)
-            newtodo.User = request.user
-            newtodo.save()
-            return redirect('currenttodos')
-        except ValueError:
-            return render(request, 'todo/createtodo.html', {'form': TodoForm(),'error':'Value Error.'})
+    if request.user.is_authenticated:
+        if request.method == 'GET':
+            return render(request, 'todo/createtodo.html',{'form':TodoForm()})
+        elif request.method == 'POST':
+            try:
+                form = TodoForm(request.POST)
+                newtodo = form.save(commit=False)
+                newtodo.User = request.user
+                newtodo.save()
+                return redirect('currenttodos')
+            except ValueError:
+                return render(request, 'todo/createtodo.html', {'form': TodoForm(),'error':'Value Error.'})

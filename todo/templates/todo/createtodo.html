@@ -1,10 +1,20 @@
 {% extends 'todo/header.html' %}
+{% block title %}
+    New Todo
+{% endblock title %}
 {% block content %}
-    new todo<BR>
-{{ error }}
-<form action="" method="post">
-    {% csrf_token %}
-    {{ form }}
-    <button type="submit">Submit</button>
-</form>
+<bR>
+    <div class="card" style="margin:2%;">
+        <div class="card-header">Add Todo</div>
+        <div class="card-body">
+            {{ error }}<br>
+            <form action="" method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-outline-success">Submit</button>
+            </form>
+            {{ error }}
+        </div>
+    </div>
+<br>
 {% endblock %}

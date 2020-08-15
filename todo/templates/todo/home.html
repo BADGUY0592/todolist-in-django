@@ -23,14 +23,53 @@
     {% if user.is_authenticated %}
         <div class="col-lg-8">
             <div class="card text-white bg-danger" style="margin:2%;">
-                <div class="card-header">Current Todos</div>
+                <div class="card-header">
+                    Current Todos
+                    <a href="/create-todo/" class="badge badge-pill badge-warning" style="float:right">Add New</a>
+                </div>
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped table-hover">
-                            <thead></thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
+                    {% if todos.count > 0 %}
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <td>Title</td>
+                                        <td>Memo</td>
+                                        <td>Created</td>
+                                        <td></td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for todo in todos %}
+                                        {% if todo.important %}
+                                            <tr class="font-weight-bold">
+                                        {% else %}
+                                            <tr>
+                                        {% endif %}
+                                            <td>
+            <!--                                    <a class="todo" id="t{{ todo.id }}" href="#" data-toggle="modal" data-target="#exampleModal">-->
+            <!--                                        {{ todo.title }}-->
+            <!--                                    </a><br>-->
+                                                <a href="/current/todo-details/{{ todo.id }}">
+                                                    {{ todo.title }}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                {{ todo.memo|truncatechars:50 }}
+                                            </td>
+                                            <td>{{ todo.created }}</td>
+                                            <td>
+                                                <a href="/todo/edit/{{ todo.id }}" class="badge badge-pill badge-primary"><i class="fa fa-pencil"></i> Edit</a>&nbsp;&nbsp;&nbsp;
+                                                <a href="/todo/delete/{{ todo.id }}" class="badge badge-pill badge-danger"><i class="fa fa-trash-o"></i> Delete</a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <span class="badge badge-pill badge-danger"> No Todos Found. </span>
+                    {% endif %}
                 </div>
             </div>
         </div>
